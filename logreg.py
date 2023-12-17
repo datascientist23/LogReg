@@ -5,16 +5,17 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 st.write("""
-# Приложение, которое делает логарифмическую регрессию
+# Приложение для логистической регрессии
 """)
 
 st.sidebar.header('Пользовательская настройка')
 st.sidebar.write("""
-# Dataset должен быть оцифрован. Обязательно укажи нормирован dataset или нет.
-Таргет должен быть последней колонкой.
+# Dataset должен быть оцифрован. 
+Нужно указать информацию о нормировке datasetа.
+Таргет  - последний столбец.
 """)
 
-st.sidebar.header('Твой датасет нормирован?')
+st.sidebar.header('Датасет нормирован?')
 norm = st.sidebar.selectbox('Выбери',('Да','Нет'))
 
 uploaded_file = st.sidebar.file_uploader('Перетащи свой Dataset', type=['csv'])
@@ -55,12 +56,12 @@ def fit(X, y):
     return (coef_[0], coef_[1], intercept_)
     # return {X.columns.tolist()[i] : coef_[i] for i in range(X.shape[1]-1)}#.update(('intercept',intercept_))
 
-st.subheader('Веса для ваших данных')
+st.subheader('Веса для данных')
 st.write({uploaded_df.columns.tolist()[i] : fit(X, y)[i] for i in range(X.shape[1])})
 st.write({'intercept' : fit(X, y)[-1]})
 
 st.write("""
-### Для построения графика выберите 2 фичи
+### Для графика выберите 2 фичи
 """)
 st.subheader('Фича 1')
 F1 = st.sidebar.selectbox(uploaded_df.columns.tolist()[0], uploaded_df.columns.tolist()[:-1])
@@ -68,9 +69,11 @@ F1 = st.sidebar.selectbox(uploaded_df.columns.tolist()[0], uploaded_df.columns.t
 st.subheader('Фича 2')
 F2 = st.sidebar.selectbox(uploaded_df.columns.tolist()[1], uploaded_df.columns.tolist()[:-1])
 
-st.subheader('Прекрасный график')
+st.subheader('Получился вот такой скаттерплот')
 plt.scatter(uploaded_df[uploaded_df.iloc[:, -1] == 0][F1], uploaded_df[uploaded_df.iloc[:, -1] == 0][F2], color='blue', label='0')
 plt.scatter(uploaded_df[uploaded_df.iloc[:, -1] == 1][F1], uploaded_df[uploaded_df.iloc[:, -1] == 1][F2], color='red', label='1')
+
+
 plt.xlabel(F1)
 plt.ylabel(F2)
 plt.legend()
